@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymelaef.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	span { color: cornflowerblue; }
+</style>
+</head>
+<body>
+
+	<h1>Thymeleaf Page</h1>
+		
+	<h3>데이터 출력 > th:text</h3>
+	<div th:text="${num}"></div>
+	<div>현재 주소록에는 총 <span th:text="${num}">OO</span>개의 데이터가 있습니다.</div>
+	
+	<div>제 이름은 <span th:text="${name}">OOO</span>입니다.</div>
+	
+	<hr>
+	<!-- 
+	<div>숫자: <span th:text="${n}"></span></div>
+	<div>문자: <span th:text="${name}"></span></div>
+	<div>날짜: <span th:text="${now}"></span></div>
+	<div>객체: <span th:text="${dto}"></span></div>
+	 -->
+	<hr>
+	
+	<div>이름: <span th:text="${dto.name}"></span></div>
+	<div>나이: <span th:text="${dto.age}"></span></div>
+	<div>전화: <span th:text="${dto.tel}"></span></div>
+	<div>주소: <span th:text="${dto.address}"></span></div>
+	
+	
+	
+	<h3>데이터 출력 > th:utext, unescaped text</h3>
+	<div>나이: <span th:text="'<b>' + ${dto.age} + '</b>'"></span></div>
+	<div>나이: <span th:utext="'<b>' + ${dto.age} + '</b>'"></span></div>
+	
+	<hr>
+	
+	<h3>th:inline, Inline Style, 직접 출력</h3>
+	
+	<div th:inline="text">[[${dto.age}]]</div>
+	<div>th:text [[${logo}]]</div>
+	<div>th:utext[(${logo})]</div>
+	
+	
+	<hr>
+	
+	<h3>연산</h3>
+	<div>10 + 5 = <span th:text="${dto.age} + 5"></span></div>
+	<div>10 - 5 = <span th:text="${dto.age} - 5"></span></div>
+	<div>10 * 5 = <span th:text="${dto.age} * 5"></span></div>
+	<div>10 / 5 = <span th:text="${dto.age} / 5"></span></div>
+	<div>10 % 5 = <span th:text="${dto.age} % 5"></span></div>
+	
+	
+	<div>10 &gt; 5 = <span th:text="${dto.age} > 5"></span></div>
+	<div>10 &gt;= 5 = <span th:text="${dto.age} >= 5"></span></div>
+	<div>10 &lt; 5 = <span th:text="${dto.age} < 5"></span></div>
+	<div>10 &lt;= 5 = <span th:text="${dto.age} <= 5"></span></div>
+	<div>10 == 5 = <span th:text="${dto.age} == 5"></span></div>
+	<div>10 != 5 = <span th:text="${dto.age} != 5"></span></div>
+	
+	<div>삼항 <span th:text="${dto.age} % 2 == 0 ? '짝수':'홀수'"></span></div>
+	
+	<div><span th:text="${dto.name} + ',' + ${dto.address}"></span></div>
+	<div><span th:text="|${dto.name},${dto.address}|"></span></div>
+	
+	
+	<hr>
+	
+	<h3>th:with > 지역변수</h3>
+	
+	<div th:with="seq=10">
+		<div>내부: <span th:text="${seq}"></span></div>
+		<div>연산: <span th:text="${seq} > 0"></span></div>
+	</div>
+	
+	<div>외부: <span th:text="${seq}"></span></div>
+
+
+	
+	<hr>
+	
+	<h3>th:if</h3>
+	
+	<!-- 
+	<c:if test="${num > 0}">
+		양수
+	</c:if> 
+	-->
+	
+	<h1 th:if="${num} > 0">
+		양수
+	</h1>
+	
+	<div th:unless="${num} > 0">
+		음수
+	</div>
+
+
+
+	<h3>th:block</h3>
+	
+	<th:block th:if="${num} > 0">
+		양수
+	</th:block>
+	
+	
+	<h3>th:switch</h3>
+	
+	<div th:switch="${num} % 2">
+		<div th:case="0">짝수</div>
+		<div th:case="1">홀수</div>
+		<div th:case="*">기타</div>
+	</div>
+	
+	
+	<th:block th:switch="${num} % 2">
+		<th:block th:case="0">짝수</th:block>
+		<th:block th:case="1">홀수</th:block>
+		<th:block th:case="*">기타</th:block>
+	</th:block>
+
+
+
+
+	<h3>HashMap</h3>
+	
+	<div th:text="${dto.name}"></div>
+	<div th:text="${map.red}"></div>
+
+
+
+
+
+
+	<h3>th:each</h3>
+	
+	<!-- 
+	<ul>
+	<c:forEach items="${fruit}" var="str">
+		<li></li>
+	<c:forEach>
+	</ul>
+	-->
+	
+	<ul>
+		<li th:each="item : ${fruit}">
+			<th:block th:text="${item}"></th:block>
+		</li>
+	</ul>
+
+
+	<table border>
+		<tr>
+			<th>번호</th>
+			<th>이름</th>
+			<th>나이</th>
+			<th>전화</th>
+			<th>주소</th>
+		</tr>
+		<tr th:each="dto : ${list}">
+			<td th:text="${dto.seq}"></td>
+			<td th:text="${dto.name}"></td>
+			<td th:text="${dto.age}"></td>
+			<td th:text="${dto.tel}"></td>
+			<td th:text="${dto.address}"></td>
+		</tr>
+	</table>
+	
+	<hr>
+	
+	<!-- 
+	<c:forEach items="${list}" var="dto" varStatus="staus">
+		${status.index} : 0~ 순서
+		${status.count} : 1~ 순서
+		${status.current} : 현재 dto
+		${status.first} : boolean
+		${status.last} : boolean
+	</c:forEach> 
+	-->
+	
+	<table border>
+		<tr th:each="dto, status : ${list}">
+			<td th:text="${dto.name}"></td>
+			<td th:text="${dto.age}"></td>
+			<td th:text="${status.index}"></td>
+			<td th:text="${status.count}"></td>
+			<td th:text="${status.odd + ' ' + status.even}"></td>
+			<td th:text="${status.first + ' ' + status.last}"></td>
+		</tr>
+	</table>
+	
+	<hr>
+	
+	<!-- <c:forEach begin="1" end="10"> -->
+	
+	<div th:each="num : ${#numbers.sequence(1,10,2)}">
+		<span th:text="${num}"></span>
+	</div>
+	
+	
+	<div th:each="num : ${#numbers.sequence(1,10)}" th:text="${num}">
+	</div>
+	
+	
+	<th:block th:each="num : ${#numbers.sequence(1,10)}" th:text="${num}">
+	</th:block>
+	
+	
+	
+	<hr>
+	
+	<h3>링크</h3>
+	
+	<a href="/ex02">페이지 이동하기</a>
+	<br>
+	<a href="/ex02?age=[[${dto.age}]]">페이지 이동하기</a>
+	<br>
+	<br>
+	
+	<!-- 
+	/ex02?seq=10&name=hong > QueryString
+	/ex02/10/hong > Path Parameter
+	-->
+	<a th:href="@{/ex02(age=${dto.age},name=${dto.name},tel=${dto.tel})}">페이지 이동하기(QueryString)</a>
+	<br>
+	<a th:href="@{/ex03/red}">페이지 이동하기(경로 변수)</a>
+	<br>
+	<a th:href="@{/ex03/{color}(color=blue)}">페이지 이동하기(경로 변수)</a>
+	<br>
+	<a th:href="@{/ex03/{color}(color=${map.yellow})}">페이지 이동하기(경로 변수)</a>
+	
+
+	<hr>
+	
+	<h3>유틸리티 객체 > #dates</h3>
+	
+	<div th:text="${#dates.year(now)}"></div>
+	<div th:text="${#dates.month(now)}"></div>
+	<div th:text="${#dates.day(now)}"></div>
+	<div th:text="${#dates.dayOfWeekName(now)}"></div>
+	<div th:text="${#dates.hour(now)}"></div>
+	<div th:text="${#dates.minute(now)}"></div>
+	<div th:text="${#dates.second(now)}"></div>
+	
+	<div th:text="${#dates.format(now, 'yyyy-MM-dd')}"></div>
+	<div th:text="${#dates.format(now, 'yyyy-MM-dd HH:mm:ss')}"></div>
+	
+
+	<h3>유틸리티 객체 > #numbers</h3>
+	
+	<div th:text="${n}"></div>
+	<div th:text="${#numbers.formatInteger(n, 3, 'COMMA')}"></div>
+	<div th:text="${#numbers.formatDecimal(12345.6789, 3, 'COMMA', 2, 'POINT')}"></div>
+	
+	
+	<h3>유틸리티 객체 > #strings</h3>
+	
+	<div th:text="${dto.address}"></div>
+	<div th:text="${#strings.replace(dto.address, '서울', '인천')}"></div>
+	<div th:each="str : ${#strings.listSplit(dto.address, ' ')}">[[${str}]]</div>
+
+
+	<hr>
+	
+	<input type="button" value="클릭" id="btn">
+	
+	
+	<hr>
+	
+	<div th:text="${#session.getAttribute('id')}"></div>
+	<div th:text="${#session.getAttribute('name')}"></div>
+	
+	<div th:text="${session.id}"></div>
+	<div th:text="${session.name}"></div>
+	
+	<div th:if="${session.id != null}">
+		인증 사용자
+	</div>
+	<div th:if="${session.id == null}">
+		미인증 사용자
+	</div>
+	
+	
+	<!-- 
+	<script>
+	
+		document.getElementById('btn').onclick = function() {
+			alert('[[${dto.name}]]');
+		};
+		
+	</script> 
+	-->
+	
+	<script th:inline="javascript">
+	
+		document.getElementById('btn').onclick = function() {
+			alert([[${dto.name}]]);
+		};
+		
+	</script>
+
+
+	<br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
